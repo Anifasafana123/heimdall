@@ -1,0 +1,4 @@
+server_url = "http://localhost:8080/api/metrics"
+computer_id = "computer-01"
+interval_secs = 10
+auth_token = "change-me"
