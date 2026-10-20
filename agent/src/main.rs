@@ -1,6 +1,7 @@
 mod config;
 mod metrics;
 mod network;
+mod sender;
 
 use std::time::Duration;
 use sysinfo::{Networks, System};
@@ -19,6 +20,14 @@ async fn main() {
         cfg.computer_id, cfg.server_url, cfg.interval_secs
     );
 
+    let client = match sender::build_client() {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("HTTP client error: {e}");
+            std::process::exit(1);
+        }
+    };
+
     let mut sys = System::new();
     sys.refresh_cpu_usage();
     let mut networks = Networks::new_with_refreshed_list();
@@ -33,6 +42,10 @@ async fn main() {
             "system": sys_metrics,
             "network": net_metrics,
         });
-        println!("{}", serde_json::to_string_pretty(&payload).unwrap());
+
+        match sender::send(&client, &cfg, &payload).await {
+            Ok(()) => println!("Metrics sent to {}", cfg.server_url),
+            Err(e) => eprintln!("Could not send metrics: {e}"),
+        }
     }
 }
