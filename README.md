@@ -15,7 +15,7 @@ MAIN COMPUTER - CENTRAL SERVER
    Backend REST API (Rust, Axum, Tokio, Serde JSON, Tower HTTP, Tracing)
    Background Processing (Tokio async tasks)
    Database (MySQL Community Edition, SQLx)
-   Admin Dashboard (React, TypeScript, Tailwind CSS, Recharts)
+   Admin Dashboard (HTMX, Tailwind CSS)
         ^
         |  HTTPS / TLS
 Administrator Computer (Web browser)
@@ -29,7 +29,7 @@ Administrator Computer (Web browser)
 | Backend | Rust, Axum, Tokio, Tower HTTP, Tracing |
 | Database | MySQL Community Edition, SQLx |
 | Background jobs | Tokio async tasks |
-| Frontend | React, TypeScript, Tailwind CSS, Recharts |
+| Frontend | HTMX, Tailwind CSS |
 
 ## Project Structure
 
@@ -40,7 +40,7 @@ Administrator Computer (Web browser)
 ├── backend/          # REST API (Rust, Axum)
 │   ├── migrations/   # MySQL migrations
 │   └── src/tasks/    # Background processing
-├── dashboard/        # Admin Dashboard (React + TypeScript)
+├── dashboard/        # Admin Dashboard (HTMX, Tailwind CSS)
 ├── docs/             # Documentation (database, API contract)
 └── README.md
 ```
@@ -61,7 +61,6 @@ Administrator Computer (Web browser)
 ### Prerequisites
 
 - Rust (stable) and Cargo
-- Node.js 18+ and npm
 - MySQL Community Edition
 
 ### Agent
@@ -81,18 +80,13 @@ cargo run
 
 ### Dashboard
 
-```bash
-cd dashboard
-npm install
-npm run dev
-```
-
+The dashboard is built with HTMX and served by the backend. Start the backend to access it.
 ## Contribution Workflow
 
 1. Fork the repository and clone your fork.
 2. Pick your assigned issue and create a branch:
    ```bash
-   git checkout -b feature/<short-name>
+   git checkout -b feature/background-processing
    ```
 3. Work only inside your assigned folder to avoid merge conflicts.
 4. Commit with the issue number:
@@ -100,7 +94,7 @@ npm run dev
    git commit -m "Add CPU metrics collection (#1)"
    ```
 5. Push the branch and open a Pull Request to the main repository.
-6. Write `Closes #<issue-number>` in the PR description.
+6. Write `Closes #5` (your issue number) in the PR description.
 7. Do not push directly to `main`.
 
 ## Privacy and Authorization
@@ -111,4 +105,13 @@ npm run dev
 
 ## License
 
-To be decided by the project owner.
+See Pending Decisions below.
+
+## Pending Decisions
+
+- [ ] License for the project (to be chosen by the project owner)
+- [ ] Template engine for HTMX responses (Askama vs Maud)
+- [ ] Whether Tailwind CSS is built with npm or the standalone CLI
+- [ ] Authentication method for agents (API key vs mTLS)
+- [ ] Data retention period for browser history
+- [ ] How often agents send data to the backend
