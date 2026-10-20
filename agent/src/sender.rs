@@ -46,5 +46,7 @@ pub async fn send<T: Serialize>(
         }
     }
 
-    Err(format!("giving up after {MAX_ATTEMPTS} attempts: {last_error}"))
+    Err(format!(
+        "giving up after {MAX_ATTEMPTS} attempts: {last_error}"
+    ))
 }

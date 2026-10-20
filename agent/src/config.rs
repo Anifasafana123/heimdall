@@ -18,8 +18,7 @@ impl Config {
     pub fn load(path: impl AsRef<Path>) -> Result<Config, String> {
         let text = fs::read_to_string(path.as_ref())
             .map_err(|e| format!("cannot read config file: {e}"))?;
-        let cfg: Config =
-            toml::from_str(&text).map_err(|e| format!("invalid config file: {e}"))?;
+        let cfg: Config = toml::from_str(&text).map_err(|e| format!("invalid config file: {e}"))?;
         if cfg.interval_secs == 0 {
             return Err("interval_secs must be greater than 0".to_string());
         }
