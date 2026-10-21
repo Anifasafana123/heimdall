@@ -6,7 +6,7 @@ mod handlers;
 mod models;
 mod tasks;
 
-use sqlx::mysql::MySqlPoolOptions;
+use sqlx::postgres::PgPoolOptions;
 use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
@@ -24,8 +24,8 @@ async fn main() -> anyhow::Result<()> {
     let config = config::Config::from_env()?;
     tracing::info!(host = %config.host, port = config.port, "starting backend");
 
-    // Database pool
-    let pool = MySqlPoolOptions::new()
+    // PostgreSQL connection pool
+    let pool = PgPoolOptions::new()
         .max_connections(10)
         .connect(&config.database_url)
         .await?;

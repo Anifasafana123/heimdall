@@ -1,39 +1,36 @@
--- Initial schema for the network monitoring system.
--- MySQL Community Edition. Using utf8mb4.
+-- Initial schema — PostgreSQL
+-- Robeeta (issue #2). Full schema is Yaswini's (issue #3).
 
 CREATE TABLE IF NOT EXISTS computers (
-    id              CHAR(36)     NOT NULL,
-    hostname        VARCHAR(255) NOT NULL,
-    mac_address     VARCHAR(17)  NOT NULL,
-    ip_address      VARCHAR(45)  NOT NULL,
-    owner           VARCHAR(255) NOT NULL,
-    is_authorized   TINYINT(1)   NOT NULL DEFAULT 1,
-    registered_at   DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    last_seen_at    DATETIME(3)  NULL,
+    id              UUID        NOT NULL DEFAULT gen_random_uuid(),
+    hostname        TEXT        NOT NULL,
+    mac_address     TEXT        NOT NULL,
+    ip_address      TEXT        NOT NULL,
+    owner           TEXT        NOT NULL,
+    is_authorized   BOOLEAN     NOT NULL DEFAULT TRUE,
+    registered_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_seen_at    TIMESTAMPTZ,
     PRIMARY KEY (id),
-    UNIQUE KEY uq_computers_mac (mac_address)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    UNIQUE (mac_address)
+);
 
 CREATE TABLE IF NOT EXISTS metrics (
-    id              BIGINT       NOT NULL AUTO_INCREMENT,
-    computer_id     CHAR(36)     NOT NULL,
-    metric_kind     VARCHAR(32)  NOT NULL,
-    value           DOUBLE       NOT NULL,
-    recorded_at     DATETIME(3)  NOT NULL,
-    PRIMARY KEY (id),
-    KEY idx_metrics_computer_kind_time (computer_id, metric_kind, recorded_at),
-    CONSTRAINT fk_metrics_computer FOREIGN KEY (computer_id)
-        REFERENCES computers (id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    id              BIGSERIAL   PRIMARY KEY,
+    computer_id     UUID        NOT NULL REFERENCES computers(id) ON DELETE CASCADE,
+    metric_kind     TEXT        NOT NULL,
+    value           DOUBLE PRECISION NOT NULL,
+    recorded_at     TIMESTAMPTZ NOT NULL
+);
 
--- Approved metric kinds (enforced in application layer, documented here):
+CREATE INDEX IF NOT EXISTS idx_metrics_computer_kind_time
+    ON metrics (computer_id, metric_kind, recorded_at);
+
+-- Approved metric kinds (enforced in application layer):
 --   cpu_usage, memory_usage, disk_usage, network_rx, network_tx
 
 CREATE TABLE IF NOT EXISTS admin_users (
-    id              BIGINT       NOT NULL AUTO_INCREMENT,
-    username        VARCHAR(64)  NOT NULL,
-    password_hash   VARCHAR(255) NOT NULL,
-    created_at      DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    PRIMARY KEY (id),
-    UNIQUE KEY uq_admin_username (username)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    id              BIGSERIAL   PRIMARY KEY,
+    username        TEXT        NOT NULL UNIQUE,
+    password_hash   TEXT        NOT NULL,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

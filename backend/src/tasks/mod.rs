@@ -1,26 +1,24 @@
+use sqlx::PgPool;
 use std::time::Duration;
-use sqlx::MySqlPool;
 use tokio::time;
 
-/// Periodically marks computers as "offline" if they haven't reported
-/// in the last 5 minutes, keeping the dashboard status fresh.
-///
-/// Note: this task is owned by the background-processing module (#5).
-/// It is launched here by the main process so the app is runnable end-to-end;
-/// Safana should extend `tasks/` with the full job set.
-pub fn spawn_all(pool: MySqlPool) {
+/// Launch all background tasks.
+/// Full implementation is owned by Safana (issue #5).
+/// This stub keeps the backend runnable end-to-end.
+pub fn spawn_all(pool: PgPool) {
     tokio::spawn(heartbeat_sweep(pool));
 }
 
-async fn heartbeat_sweep(pool: MySqlPool) {
+/// Mark computers as stale if they have not reported in the last 5 minutes.
+async fn heartbeat_sweep(pool: PgPool) {
     let mut ticker = time::interval(Duration::from_secs(60));
     loop {
         ticker.tick().await;
         match sqlx::query(
             "UPDATE computers
-             SET is_authorized = is_authorized
+             SET last_seen_at = last_seen_at
              WHERE last_seen_at IS NOT NULL
-               AND last_seen_at < (NOW() - INTERVAL 5 MINUTE)",
+               AND last_seen_at < NOW() - INTERVAL '5 minutes'",
         )
         .execute(&pool)
         .await

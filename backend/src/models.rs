@@ -4,12 +4,9 @@ use sqlx::FromRow;
 use uuid::Uuid;
 
 /// A registered, authorized computer on the network.
-///
-/// `id` is stored as CHAR(36) in MySQL and mapped to `String` here.
-/// The API layer validates it as a UUID at the boundary.
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Computer {
-    pub id: String,
+    pub id: Uuid,
     pub hostname: String,
     pub mac_address: String,
     pub ip_address: String,
@@ -20,13 +17,10 @@ pub struct Computer {
 }
 
 /// A metric sample reported by a monitoring agent.
-///
-/// Only approved metrics are stored. `metric_kind` is constrained by the
-/// agent contract (cpu_usage, memory_usage, disk_usage, network_rx, network_tx).
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Metric {
     pub id: i64,
-    pub computer_id: String,
+    pub computer_id: Uuid,
     pub metric_kind: String,
     pub value: f64,
     pub recorded_at: DateTime<Utc>,

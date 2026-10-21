@@ -18,14 +18,8 @@ async fn main() -> anyhow::Result<()> {
     let mut i = 1;
     while i < args.len() {
         match args[i].as_str() {
-            "--username" => {
-                username = args.get(i + 1).cloned().unwrap_or_default();
-                i += 2;
-            }
-            "--password" => {
-                password = args.get(i + 1).cloned().unwrap_or_default();
-                i += 2;
-            }
+            "--username" => { username = args.get(i + 1).cloned().unwrap_or_default(); i += 2; }
+            "--password" => { password = args.get(i + 1).cloned().unwrap_or_default(); i += 2; }
             _ => i += 1,
         }
     }
@@ -40,7 +34,7 @@ async fn main() -> anyhow::Result<()> {
         std::process::exit(1);
     });
 
-    let pool = sqlx::mysql::MySqlPoolOptions::new()
+    let pool = sqlx::postgres::PgPoolOptions::new()
         .max_connections(2)
         .connect(&database_url)
         .await?;
@@ -48,8 +42,8 @@ async fn main() -> anyhow::Result<()> {
     let hash = bcrypt::hash(&password, 12)?;
 
     sqlx::query(
-        "INSERT INTO admin_users (username, password_hash) VALUES (?, ?)
-         ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash)",
+        "INSERT INTO admin_users (username, password_hash) VALUES ($1, $2)
+         ON CONFLICT (username) DO UPDATE SET password_hash = EXCLUDED.password_hash",
     )
     .bind(&username)
     .bind(&hash)

@@ -3,7 +3,7 @@ use axum::{
     routing::{get, post},
     Router,
 };
-use sqlx::MySqlPool;
+use sqlx::PgPool;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 
 use crate::{auth, handlers};
@@ -11,7 +11,7 @@ use crate::{auth, handlers};
 /// Shared application state available to all handlers.
 #[derive(Clone)]
 pub struct AppState {
-    pub pool: MySqlPool,
+    pub pool: PgPool,
     pub config: crate::config::Config,
 }
 
