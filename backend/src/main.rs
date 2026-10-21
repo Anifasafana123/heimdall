@@ -5,7 +5,6 @@ mod error;
 mod handlers;
 mod models;
 mod tasks;
-mod views;
 
 use sqlx::mysql::MySqlPoolOptions;
 use tracing_subscriber::EnvFilter;
@@ -17,7 +16,9 @@ async fn main() -> anyhow::Result<()> {
 
     // Init tracing
     tracing_subscriber::fmt()
-        .with_env_filter(EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info")))
+        .with_env_filter(
+            EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info")),
+        )
         .init();
 
     let config = config::Config::from_env()?;
@@ -37,7 +38,7 @@ async fn main() -> anyhow::Result<()> {
         config: config.clone(),
     };
 
-    // Spawn background tasks
+    // Spawn background tasks (owned by Safana, issue #5)
     tasks::spawn_all(pool.clone());
 
     let router = app::app(state);
