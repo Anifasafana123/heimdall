@@ -105,11 +105,10 @@ The dashboard is built with HTMX and served by the backend. Start the backend to
 
 ## License
 
-See Pending Decisions below.
+This project is licensed under the [MIT License](LICENSE).
 
 ## Pending Decisions
 
-- [ ] License for the project (to be chosen by the project owner)
 - [ ] Template engine for HTMX responses (Askama vs Maud)
 - [ ] Whether Tailwind CSS is built with npm or the standalone CLI
 - [ ] Authentication method for agents (API key vs mTLS)
