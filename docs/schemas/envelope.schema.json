@@ -1,0 +1,68 @@
+{
+  "$id": "https://heimdall.lk/schemas/v1/envelope",
+  "title": "Signing Envelope",
+  "description": "Wraps every agent-to-server message after enrolment. The sig field covers all other fields in JCS-canonical form.",
+  "type": "object",
+  "required": ["v", "device_id", "seq", "nonce", "ts_agent", "payload_type", "payload_hash", "prev_hash", "payload", "sig"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "const": 1,
+      "description": "Protocol version. Must be 1."
+    },
+    "device_id": {
+      "type": "string",
+      "description": "Device identifier equal to the serial number of the device certificate.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "seq": {
+      "type": "integer",
+      "description": "Strictly increasing per device. Starts at 1 after enrolment. Server rejects seq <= last_accepted_seq.",
+      "minimum": 1
+    },
+    "nonce": {
+      "type": "string",
+      "description": "Base64url-encoded 16 cryptographically random bytes. Fresh for each message.",
+      "contentEncoding": "base64url",
+      "minLength": 22,
+      "maxLength": 22
+    },
+    "ts_agent": {
+      "type": "integer",
+      "description": "Agent wall-clock time at signing, Unix seconds. Advisory; server receive time is authoritative.",
+      "minimum": 0
+    },
+    "payload_type": {
+      "type": "string",
+      "enum": ["heartbeat", "measurement", "failure", "lease_request"],
+      "description": "Identifies which payload schema applies."
+    },
+    "payload_hash": {
+      "type": "string",
+      "description": "Base64url-encoded SHA-256 of the JCS-canonical payload bytes.",
+      "contentEncoding": "base64url",
+      "minLength": 43,
+      "maxLength": 43
+    },
+    "prev_hash": {
+      "type": "string",
+      "description": "Base64url-encoded SHA-256 of the previous envelope (canonical, including sig). For the first message, SHA-256 of the device certificate DER bytes.",
+      "contentEncoding": "base64url",
+      "minLength": 43,
+      "maxLength": 43
+    },
+    "payload": {
+      "type": "object",
+      "description": "Message body. Schema is determined by payload_type."
+    },
+    "sig": {
+      "type": "string",
+      "description": "Base64url-encoded Ed25519 signature over the JCS-canonical envelope with this sig field omitted.",
+      "contentEncoding": "base64url",
+      "minLength": 86,
+      "maxLength": 86
+    }
+  }
+}

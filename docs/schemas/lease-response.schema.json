@@ -1,0 +1,83 @@
+{
+  "$id": "https://heimdall.lk/schemas/v1/lease-response",
+  "title": "Speedtest Lease Response",
+  "description": "Server response to a speedtest lease request. Status is either granted or refused. Contains only a lease decision — no commands, no scripts. The probe_endpoint field is a hostname the agent connects to using its built-in protocol, not a URL to fetch.",
+  "type": "object",
+  "required": ["v", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "const": 1,
+      "description": "Protocol version. Must be 1."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["granted", "refused"],
+      "description": "Whether the lease was granted."
+    },
+    "lease_token": {
+      "type": "string",
+      "description": "Opaque token. Must be included verbatim in the subsequent measurement result. Present only when status is granted.",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "expires_at": {
+      "type": "integer",
+      "description": "Unix timestamp after which this lease is void. The agent must not start a test it cannot finish before this time. Present only when status is granted.",
+      "minimum": 0
+    },
+    "probe_id": {
+      "type": "string",
+      "description": "Identifier of the probe to test against. Present only when status is granted.",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "probe_endpoint": {
+      "type": "string",
+      "description": "Hostname of the probe server. The agent connects using its built-in RMBT protocol. Present only when status is granted.",
+      "format": "hostname",
+      "maxLength": 253
+    },
+    "max_duration_secs": {
+      "type": "integer",
+      "description": "The agent must not run the test longer than this. Present only when status is granted.",
+      "minimum": 1,
+      "maximum": 30
+    },
+    "max_streams": {
+      "type": "integer",
+      "description": "The agent must not use more parallel streams than this. Present only when status is granted.",
+      "minimum": 1,
+      "maximum": 16
+    },
+    "error_code": {
+      "type": "string",
+      "enum": [
+        "E_LEASE_OFFICE_BUSY",
+        "E_LEASE_CEILING_REACHED",
+        "E_UNKNOWN"
+      ],
+      "description": "Machine-readable error code. Present when status is refused."
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Human-readable description. Present when status is refused.",
+      "maxLength": 512
+    },
+    "retry_after_secs": {
+      "type": "integer",
+      "description": "How many seconds to wait before requesting another lease. Present when status is refused.",
+      "minimum": 0
+    }
+  },
+  "if": {
+    "properties": { "status": { "const": "granted" } }
+  },
+  "then": {
+    "required": ["lease_token", "expires_at", "probe_id", "probe_endpoint", "max_duration_secs", "max_streams"]
+  },
+  "else": {
+    "required": ["error_code", "error_message", "retry_after_secs"]
+  }
+}

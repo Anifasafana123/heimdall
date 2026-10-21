@@ -1,0 +1,10 @@
+{
+  "v": 1,
+  "status": "granted",
+  "lease_token": "eyJhbGciOiJIUzI1NiJ9.eyJkZXZpY2VfaWQiOiJ0ZXN0In0.abc",
+  "expires_at": 1783000900,
+  "probe_id": "lk-col-01",
+  "probe_endpoint": "col-01.probes.heimdall.lk",
+  "max_duration_secs": 8,
+  "max_streams": 8
+}

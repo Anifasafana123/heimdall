@@ -1,0 +1,47 @@
+{
+  "$id": "https://heimdall.lk/schemas/v1/submit-response",
+  "title": "Submit Response",
+  "description": "Server response to any POST /v1/submit message (heartbeat, measurement, failure). Contains only a lease decision, a config version number, and a revocation flag. No commands, no URLs, no scripts.",
+  "type": "object",
+  "required": ["v", "accepted", "config_version", "revoked"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "const": 1,
+      "description": "Protocol version. Must be 1."
+    },
+    "accepted": {
+      "type": "boolean",
+      "description": "Whether the submitted message was accepted and stored."
+    },
+    "config_version": {
+      "type": "integer",
+      "description": "Current authoritative config version. If different from the agent's running version, the agent fetches the new config.",
+      "minimum": 1
+    },
+    "revoked": {
+      "type": "boolean",
+      "description": "If true, this device has been revoked. The agent must stop sending immediately."
+    },
+    "error_code": {
+      "type": "string",
+      "enum": [
+        "E_SEQ_REPLAY",
+        "E_SIG_INVALID",
+        "E_PAYLOAD_HASH_MISMATCH",
+        "E_CERT_EXPIRED",
+        "E_CERT_REVOKED",
+        "E_CERT_UNKNOWN",
+        "E_VERSION_TOO_OLD",
+        "E_UNKNOWN"
+      ],
+      "description": "Machine-readable error code. Present only when accepted is false."
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Human-readable description. Present only when accepted is false.",
+      "maxLength": 512
+    }
+  }
+}

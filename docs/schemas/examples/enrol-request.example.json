@@ -1,0 +1,9 @@
+{
+  "v": 1,
+  "office_code": "HMD-4K7P-Q2XR-9F3T",
+  "csr": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA",
+  "machine_fingerprint": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "agent_version": "1.0.0",
+  "os": "windows",
+  "arch": "x86_64"
+}

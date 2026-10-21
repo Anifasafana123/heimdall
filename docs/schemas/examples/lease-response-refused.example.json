@@ -1,0 +1,7 @@
+{
+  "v": 1,
+  "status": "refused",
+  "error_code": "E_LEASE_OFFICE_BUSY",
+  "error_message": "Another computer in this office is currently running a speedtest.",
+  "retry_after_secs": 120
+}

@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "failure_id": "01J8KXZABCDEFGHJKLMNPQRST",
+  "failure_type": "measurement_timeout",
+  "started_at": 1783000000,
+  "failed_at": 1783000032,
+  "error_code": "E_PROBE_TIMEOUT",
+  "detail": "No response from probe lk-col-01 after 30s",
+  "context": {
+    "probe_id": "lk-col-01",
+    "lease_token": "eyJhbGciOiJIUzI1NiJ9.eyJkZXZpY2VfaWQiOiJ0ZXN0In0.abc"
+  }
+}

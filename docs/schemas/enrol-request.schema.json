@@ -1,0 +1,47 @@
+{
+  "$id": "https://heimdall.lk/schemas/v1/enrol-request",
+  "title": "Enrolment Request",
+  "description": "Sent by an agent to begin enrolment. The only unauthenticated message in the protocol. Authenticated by office_code.",
+  "type": "object",
+  "required": ["v", "office_code", "csr", "machine_fingerprint", "agent_version", "os", "arch"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "const": 1,
+      "description": "Protocol version. Must be 1."
+    },
+    "office_code": {
+      "type": "string",
+      "pattern": "^HMD-[0-9A-HJ-NP-TV-Z]{4}-[0-9A-HJ-NP-TV-Z]{4}-[0-9A-HJ-NP-TV-Z]{4}$",
+      "description": "Office code in Crockford base32 format: HMD-XXXX-XXXX-XXXX."
+    },
+    "csr": {
+      "type": "string",
+      "description": "Base64url-encoded PKCS#10 certificate signing request containing the agent's Ed25519 public key.",
+      "contentEncoding": "base64url"
+    },
+    "machine_fingerprint": {
+      "type": "string",
+      "description": "Base64url-encoded 32-byte HMAC of stable hardware identifiers. The server pepper is never transmitted.",
+      "contentEncoding": "base64url",
+      "minLength": 43,
+      "maxLength": 43
+    },
+    "agent_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semver string for the agent version."
+    },
+    "os": {
+      "type": "string",
+      "enum": ["windows", "linux", "macos"],
+      "description": "Operating system the agent is running on."
+    },
+    "arch": {
+      "type": "string",
+      "enum": ["x86_64", "aarch64"],
+      "description": "CPU architecture."
+    }
+  }
+}

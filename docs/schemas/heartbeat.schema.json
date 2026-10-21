@@ -1,0 +1,25 @@
+{
+  "$id": "https://heimdall.lk/schemas/v1/heartbeat",
+  "title": "Heartbeat Payload",
+  "description": "Payload for payload_type='heartbeat'. Sent every 60 seconds to prove the agent is alive. Carried inside a signing envelope.",
+  "type": "object",
+  "required": ["v", "uptime_secs", "config_version"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "const": 1,
+      "description": "Protocol version. Must be 1."
+    },
+    "uptime_secs": {
+      "type": "integer",
+      "description": "Seconds since the agent process started.",
+      "minimum": 0
+    },
+    "config_version": {
+      "type": "integer",
+      "description": "The config version the agent is currently running.",
+      "minimum": 1
+    }
+  }
+}

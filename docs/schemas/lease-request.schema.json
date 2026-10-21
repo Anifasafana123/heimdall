@@ -1,0 +1,20 @@
+{
+  "$id": "https://heimdall.lk/schemas/v1/lease-request",
+  "title": "Speedtest Lease Request Payload",
+  "description": "Payload for payload_type='lease_request'. The agent must obtain a lease before any throughput measurement. Carried inside a signing envelope.",
+  "type": "object",
+  "required": ["v", "estimated_capacity_bps"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "const": 1,
+      "description": "Protocol version. Must be 1."
+    },
+    "estimated_capacity_bps": {
+      "type": "integer",
+      "description": "Agent's best estimate of the office's download capacity in bits per second. Used by the server to enforce the daily byte ceiling.",
+      "minimum": 0
+    }
+  }
+}

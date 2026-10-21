@@ -1,0 +1,6 @@
+{
+  "v": 1,
+  "status": "refused",
+  "error_code": "E_OFFICE_CODE_INVALID",
+  "error_message": "The office code is not valid."
+}

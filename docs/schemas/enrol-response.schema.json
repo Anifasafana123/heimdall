@@ -1,0 +1,77 @@
+{
+  "$id": "https://heimdall.lk/schemas/v1/enrol-response",
+  "title": "Enrolment Response",
+  "description": "Server response to an enrolment request. Status is enrolled, refused, or pending.",
+  "type": "object",
+  "required": ["v", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "const": 1,
+      "description": "Protocol version. Must be 1."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["enrolled", "refused", "pending"],
+      "description": "Outcome of the enrolment request."
+    },
+    "device_id": {
+      "type": "string",
+      "description": "Unique device identifier. Present only when status is enrolled.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "certificate": {
+      "type": "string",
+      "description": "Base64url-encoded X.509 DER device certificate. Present only when status is enrolled.",
+      "contentEncoding": "base64url"
+    },
+    "ca_chain": {
+      "type": "array",
+      "description": "Base64url-encoded DER certificates for the intermediate and root CA, in order. Present only when status is enrolled.",
+      "items": {
+        "type": "string",
+        "contentEncoding": "base64url"
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "cert_expires_at": {
+      "type": "integer",
+      "description": "Unix timestamp of certificate expiry. Present only when status is enrolled.",
+      "minimum": 0
+    },
+    "config_version": {
+      "type": "integer",
+      "description": "Current authoritative config version. Present only when status is enrolled.",
+      "minimum": 1
+    },
+    "error_code": {
+      "type": "string",
+      "enum": [
+        "E_OFFICE_CODE_INVALID",
+        "E_OFFICE_CODE_EXHAUSTED",
+        "E_ENROL_LIMIT_EXCEEDED",
+        "E_FINGERPRINT_CLONE",
+        "E_VERSION_TOO_OLD",
+        "E_UNKNOWN"
+      ],
+      "description": "Machine-readable error code. Present when status is refused or pending."
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Human-readable error description. Present when status is refused or pending.",
+      "maxLength": 512
+    }
+  },
+  "if": {
+    "properties": { "status": { "const": "enrolled" } }
+  },
+  "then": {
+    "required": ["device_id", "certificate", "ca_chain", "cert_expires_at", "config_version"]
+  },
+  "else": {
+    "required": ["error_code", "error_message"]
+  }
+}
