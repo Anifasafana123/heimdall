@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT\n            computer_id,\n            MAX(recorded_at) AS \"last_heartbeat_at: DateTime<Utc>\"\n        FROM metrics\n        WHERE office_id    = $1\n          AND payload_type = 'heartbeat'\n          AND quality      = 'ok'\n        GROUP BY computer_id\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "computer_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "last_heartbeat_at: DateTime<Utc>",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      null
+    ]
+  },
+  "hash": "fd4f54ecfd5268e4d5b928c6f25c96a96a6c2ad2d3e7d850bd3e91e3ce489a2d"
+}

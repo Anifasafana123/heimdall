@@ -1,0 +1,51 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        INSERT INTO metrics (\n            computer_id, office_id,\n            device_id, seq, nonce, ts_agent, payload_type,\n            payload_hash, prev_hash, sig,\n            latency_min_ms, latency_max_ms, latency_mean_ms,\n            latency_median_ms, latency_p95_ms,\n            jitter_mean_ms, jitter_max_ms,\n            packets_sent, packets_received, loss_percent,\n            download_bps, upload_bps, throughput_streams,\n            interface_type, link_speed_bps, mtu,\n            dns_resolver_class, asn, probe_id, uptime_secs,\n            quality\n        ) VALUES (\n            $1,  $2,\n            $3,  $4,  $5,  $6,  $7,\n            $8,  $9,  $10,\n            $11, $12, $13,\n            $14, $15,\n            $16, $17,\n            $18, $19, $20,\n            $21, $22, $23,\n            $24, $25, $26,\n            $27, $28, $29, $30,\n            'ok'\n        )\n        RETURNING id\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8",
+        "Varchar",
+        "Int8",
+        "Bpchar",
+        "Int8",
+        "Varchar",
+        "Bpchar",
+        "Bpchar",
+        "Bpchar",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Float8",
+        "Int8",
+        "Int8",
+        "Int2",
+        "Varchar",
+        "Int8",
+        "Int2",
+        "Varchar",
+        "Int4",
+        "Varchar",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "f9f89449e771f13be54e40a7f1c490228c3d2ba3d2f2fc0ca557287146cadef6"
+}

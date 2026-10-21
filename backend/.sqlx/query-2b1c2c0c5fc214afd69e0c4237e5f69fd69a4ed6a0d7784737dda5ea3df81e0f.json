@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT COUNT(*) AS count\n        FROM   computers\n        WHERE  office_id  = $1\n          AND  revoked_at IS NULL\n          AND  deleted_at IS NULL\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "count",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "2b1c2c0c5fc214afd69e0c4237e5f69fd69a4ed6a0d7784737dda5ea3df81e0f"
+}
