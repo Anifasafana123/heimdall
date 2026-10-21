@@ -20,11 +20,11 @@ pub mod merkle_builder;
 pub mod rollup_aggregator;
 pub mod speedtest_lease_mgr;
 
-use sqlx::MySqlPool;
+use sqlx::PgPool;
 use tracing::info;
 
 /// Start every background task. Each task runs forever in its own Tokio green thread.
-pub async fn start_all(pool: MySqlPool) {
+pub async fn start_all(pool: PgPool) {
     info!("Starting all background tasks...");
 
     tokio::spawn(ingest_worker::run(pool.clone()));

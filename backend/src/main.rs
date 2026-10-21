@@ -1,16 +1,14 @@
 mod tasks;
 
 use dotenvy::dotenv;
-use sqlx::mysql::MySqlPoolOptions;
+use sqlx::postgres::PgPoolOptions;
 use tracing::info;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    // Load .env
     dotenv().ok();
 
-    // Set up tracing
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::try_from_default_env()
             .unwrap_or_else(|_| "heimdall_backend=info".into()))
@@ -19,11 +17,10 @@ async fn main() -> anyhow::Result<()> {
 
     info!("HEIMDALL backend starting...");
 
-    // Connect to MySQL
     let database_url = std::env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set in .env");
 
-    let pool = MySqlPoolOptions::new()
+    let pool = PgPoolOptions::new()
         .max_connections(10)
         .connect(&database_url)
         .await?;
