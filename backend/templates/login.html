@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — Network Monitoring</title>
+  <link rel="stylesheet" href="/static/css/tailwind.css" />
+</head>
+<body class="h-full grid place-items-center bg-slate-900">
+  <div class="w-full max-w-sm p-8 rounded-2xl bg-slate-800 shadow-xl">
+    <h1 class="text-2xl font-semibold text-white mb-1">Network Monitoring</h1>
+    <p class="text-sm text-slate-400 mb-6">Administrator sign in</p>
+
+    <form action="/login" method="post" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-1" for="username">Username</label>
+        <input id="username" name="username" type="text" required
+               class="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-1" for="password">Password</label>
+        <input id="password" name="password" type="password" required
+               class="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none" />
+      </div>
+      <button type="submit"
+              class="w-full rounded-lg bg-sky-600 hover:bg-sky-500 transition-colors text-white font-medium py-2">
+        Sign in
+      </button>
+    </form>
+  </div>
+</body>
+</html>

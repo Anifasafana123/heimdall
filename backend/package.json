@@ -1,0 +1,13 @@
+{
+  "name": "network-monitoring-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Admin dashboard for the network monitoring system (HTMX + Tailwind CSS).",
+  "scripts": {
+    "build:css": "tailwindcss -i ./tailwind.input.css -o ./static/css/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./tailwind.input.css -o ./static/css/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

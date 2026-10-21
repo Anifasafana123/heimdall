@@ -1,0 +1,56 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "backend"
+path = "src/main.rs"
+
+[[bin]]
+name = "seed_admin"
+path = "src/bin/seed_admin.rs"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.38", features = ["full"] }
+
+# Web framework
+axum = { version = "0.7", features = ["macros"] }
+
+# Middleware / tower utilities
+tower = { version = "0.4" }
+tower-http = { version = "0.5", features = ["cors", "fs", "trace"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Database
+sqlx = { version = "0.7", features = ["mysql", "runtime-tokio", "tls-native-tls", "chrono", "uuid"] }
+
+# Logging / tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Environment / config
+dotenvy = "0.15"
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# UUID
+uuid = { version = "1", features = ["v4", "serde"] }
+
+# Error handling
+thiserror = "1"
+anyhow = "1"
+
+# HTML templating (for HTMX responses)
+minijinja = "1"
+
+# Password hashing (for admin auth)
+bcrypt = "0.15"
+
+# JWT for session tokens
+jsonwebtoken = "9"
