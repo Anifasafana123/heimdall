@@ -1,0 +1,10 @@
+{
+  "v": 1,
+  "spool_seq": 1044,
+  "ts_mono": 0,
+  "ts_wall": 1783100000,
+  "record_type": "boot",
+  "content_hash": "jlYtI_jKkdQb7ODn0Ur-a10G5eDGjRpNgx1LmqXiw_c",
+  "prev_spool_hash": "47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU",
+  "hmac": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+}

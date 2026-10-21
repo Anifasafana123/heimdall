@@ -1,0 +1,12 @@
+{
+  "v": 1,
+  "status": "enrolled",
+  "device_id": "7a3f8c2d-1234-5678-abcd-ef0123456789",
+  "certificate": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA",
+  "ca_chain": [
+    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAg8AMIIBCgKCAQEA",
+    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAh8AMIIBCgKCAQEA"
+  ],
+  "cert_expires_at": 1783000000,
+  "config_version": 1
+}

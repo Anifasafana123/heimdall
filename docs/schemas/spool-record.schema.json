@@ -1,0 +1,56 @@
+{
+  "$id": "https://heimdall.lk/schemas/v1/spool-record",
+  "title": "Spool Record",
+  "description": "One record in the agent's local hash-chained offline spool. Tampering with any record breaks the HMAC chain and the server rejects the record and all subsequent ones (SR-E5). Includes shutdown and boot markers for FR14.",
+  "type": "object",
+  "required": ["v", "spool_seq", "ts_mono", "ts_wall", "record_type", "content_hash", "prev_spool_hash", "hmac"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "const": 1,
+      "description": "Protocol version. Must be 1."
+    },
+    "spool_seq": {
+      "type": "integer",
+      "description": "Strictly increasing spool sequence number. Independent of the envelope seq.",
+      "minimum": 1
+    },
+    "ts_mono": {
+      "type": "integer",
+      "description": "Monotonic clock reading in seconds since process start. Resistant to clock adjustments.",
+      "minimum": 0
+    },
+    "ts_wall": {
+      "type": "integer",
+      "description": "Wall-clock Unix timestamp at record creation.",
+      "minimum": 0
+    },
+    "record_type": {
+      "type": "string",
+      "enum": ["measurement", "heartbeat", "failure", "shutdown", "boot", "revoked"],
+      "description": "Type of spool record. shutdown and boot are markers for FR14 (powered off vs outage)."
+    },
+    "content_hash": {
+      "type": "string",
+      "description": "Base64url-encoded SHA-256 of the serialised signing envelope for measurement/heartbeat/failure records. For shutdown, SHA-256 of the literal UTF-8 bytes 'SHUTDOWN'. For boot, SHA-256 of the boot_id string bytes.",
+      "contentEncoding": "base64url",
+      "minLength": 43,
+      "maxLength": 43
+    },
+    "prev_spool_hash": {
+      "type": "string",
+      "description": "Base64url-encoded SHA-256 of the previous spool record's canonical bytes. For the very first record, SHA-256 of the device certificate DER bytes.",
+      "contentEncoding": "base64url",
+      "minLength": 43,
+      "maxLength": 43
+    },
+    "hmac": {
+      "type": "string",
+      "description": "Base64url-encoded HMAC-SHA-256 of the JCS-canonical record with this field omitted, keyed with the device's Ed25519 private key bytes.",
+      "contentEncoding": "base64url",
+      "minLength": 43,
+      "maxLength": 43
+    }
+  }
+}

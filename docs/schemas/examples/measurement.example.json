@@ -1,0 +1,37 @@
+{
+  "v": 1,
+  "measurement_id": "01J8KXZABCDEFGHJKMNPQRSTVX",
+  "started_at": 1783000000,
+  "duration_ms": 8241,
+  "throughput": {
+    "download_bps": 12500000,
+    "upload_bps": 4200000,
+    "streams": 4,
+    "method": "rmbt"
+  },
+  "latency": {
+    "min_ms": 14,
+    "max_ms": 31,
+    "mean_ms": 18,
+    "median_ms": 17,
+    "p95_ms": 28
+  },
+  "jitter": {
+    "mean_ms": 3,
+    "max_ms": 12
+  },
+  "loss": {
+    "packets_sent": 20,
+    "packets_received": 19,
+    "loss_percent": 5.0
+  },
+  "link_context": {
+    "interface_type": "ethernet",
+    "link_speed_bps": 100000000,
+    "mtu": 1500,
+    "dns_resolver_class": "isp",
+    "asn": 45437
+  },
+  "probe_id": "lk-col-01",
+  "lease_token": "eyJhbGciOiJIUzI1NiJ9.eyJkZXZpY2VfaWQiOiJ0ZXN0In0.abc"
+}
