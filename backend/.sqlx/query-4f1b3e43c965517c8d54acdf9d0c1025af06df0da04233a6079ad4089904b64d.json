@@ -1,0 +1,90 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT\n            -- Latency (INTEGER → percentile_cont returns FLOAT8)\n            percentile_cont(0.10) WITHIN GROUP (ORDER BY latency_mean_ms) AS \"latency_p10_ms: f64\",\n            percentile_cont(0.50) WITHIN GROUP (ORDER BY latency_mean_ms) AS \"latency_median_ms: f64\",\n            percentile_cont(0.90) WITHIN GROUP (ORDER BY latency_mean_ms) AS \"latency_p90_ms: f64\",\n            -- Download (BIGINT → FLOAT8)\n            percentile_cont(0.10) WITHIN GROUP (ORDER BY download_bps)    AS \"download_p10_bps: f64\",\n            percentile_cont(0.50) WITHIN GROUP (ORDER BY download_bps)    AS \"download_median_bps: f64\",\n            percentile_cont(0.90) WITHIN GROUP (ORDER BY download_bps)    AS \"download_p90_bps: f64\",\n            -- Upload (BIGINT → FLOAT8)\n            percentile_cont(0.10) WITHIN GROUP (ORDER BY upload_bps)      AS \"upload_p10_bps: f64\",\n            percentile_cont(0.50) WITHIN GROUP (ORDER BY upload_bps)      AS \"upload_median_bps: f64\",\n            percentile_cont(0.90) WITHIN GROUP (ORDER BY upload_bps)      AS \"upload_p90_bps: f64\",\n            -- Loss (DOUBLE PRECISION)\n            percentile_cont(0.10) WITHIN GROUP (ORDER BY loss_percent) AS \"loss_p10_pct: f64\",\n            percentile_cont(0.50) WITHIN GROUP (ORDER BY loss_percent) AS \"loss_median_pct: f64\",\n            percentile_cont(0.90) WITHIN GROUP (ORDER BY loss_percent) AS \"loss_p90_pct: f64\"\n        FROM metrics\n        WHERE office_id    = $1\n          AND quality      = 'ok'\n          AND payload_type = 'measurement'\n          AND recorded_at  BETWEEN $2 AND $3\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "latency_p10_ms: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 1,
+        "name": "latency_median_ms: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 2,
+        "name": "latency_p90_ms: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 3,
+        "name": "download_p10_bps: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 4,
+        "name": "download_median_bps: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 5,
+        "name": "download_p90_bps: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 6,
+        "name": "upload_p10_bps: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 7,
+        "name": "upload_median_bps: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 8,
+        "name": "upload_p90_bps: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 9,
+        "name": "loss_p10_pct: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 10,
+        "name": "loss_median_pct: f64",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 11,
+        "name": "loss_p90_pct: f64",
+        "type_info": "Float8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "4f1b3e43c965517c8d54acdf9d0c1025af06df0da04233a6079ad4089904b64d"
+}

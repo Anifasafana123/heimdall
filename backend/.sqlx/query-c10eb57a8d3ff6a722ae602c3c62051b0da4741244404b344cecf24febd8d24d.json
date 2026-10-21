@@ -1,0 +1,128 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT\n            id, computer_id, office_id, payload_type,\n            recorded_at,\n            latency_min_ms, latency_max_ms, latency_mean_ms,\n            latency_median_ms, latency_p95_ms,\n            jitter_mean_ms, jitter_max_ms,\n            loss_percent,\n            download_bps, upload_bps,\n            interface_type, asn,\n            quality\n        FROM metrics\n        WHERE office_id   = $1\n          AND quality     = 'ok'\n          AND recorded_at BETWEEN $2 AND $3\n          AND ($4::TEXT IS NULL OR payload_type = $4)\n        ORDER BY recorded_at ASC, computer_id ASC\n        LIMIT $5\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "computer_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 2,
+        "name": "office_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 3,
+        "name": "payload_type",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "recorded_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 5,
+        "name": "latency_min_ms",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "latency_max_ms",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 7,
+        "name": "latency_mean_ms",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 8,
+        "name": "latency_median_ms",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 9,
+        "name": "latency_p95_ms",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 10,
+        "name": "jitter_mean_ms",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 11,
+        "name": "jitter_max_ms",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 12,
+        "name": "loss_percent",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 13,
+        "name": "download_bps",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 14,
+        "name": "upload_bps",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 15,
+        "name": "interface_type",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 16,
+        "name": "asn",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 17,
+        "name": "quality",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Timestamptz",
+        "Timestamptz",
+        "Text",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "c10eb57a8d3ff6a722ae602c3c62051b0da4741244404b344cecf24febd8d24d"
+}
