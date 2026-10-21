@@ -55,6 +55,18 @@ function main() {
     .filter((f) => f.endsWith(".example.json"))
     .sort();
 
+  // Pre-compile each schema once, keyed by schema filename
+  const compiled = {};
+  for (const schemaFile of Object.values(EXAMPLE_TO_SCHEMA)) {
+    if (compiled[schemaFile]) continue;
+    const schemaPath = path.join(SCHEMAS_DIR, schemaFile);
+    const schema = loadJson(schemaPath);
+    const ajvSchema = Object.assign({}, schema);
+    delete ajvSchema["$schema"];
+    delete ajvSchema["$id"]; // prevent duplicate-id error when reused across examples
+    compiled[schemaFile] = ajv.compile(ajvSchema);
+  }
+
   for (const exampleFile of examples) {
     const prefix = exampleFile.replace(".example.json", "");
     const schemaName = EXAMPLE_TO_SCHEMA[prefix];
@@ -64,17 +76,10 @@ function main() {
       continue;
     }
 
-    const schemaPath = path.join(SCHEMAS_DIR, schemaName);
     const examplePath = path.join(EXAMPLES_DIR, exampleFile);
-
-    const schema = loadJson(schemaPath);
     const example = loadJson(examplePath);
 
-    // Remove $schema keyword that older drafts may not support
-    const ajvSchema = Object.assign({}, schema);
-    delete ajvSchema["$schema"];
-
-    const validate = ajv.compile(ajvSchema);
+    const validate = compiled[schemaName];
     const valid = validate(example);
 
     if (valid) {
