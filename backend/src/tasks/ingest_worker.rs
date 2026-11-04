@@ -67,14 +67,34 @@ async fn process_batch(pool: &PgPool) -> anyhow::Result<()> {
             }
         }
 
-        // Insert into the append-only results table (no DELETE/UPDATE permitted)
+        // Extract payload from the pending row (JSONB, already validated upstream)
+        let payload: serde_json::Value = sqlx::query_scalar(
+            "SELECT payload FROM pending_results WHERE id = $1",
+        )
+        .bind(id)
+        .fetch_one(pool)
+        .await
+        .unwrap_or(serde_json::Value::Null);
+
+        // Compute payload hash (SHA-256 hex) for tamper-evidence (SR-C1)
+        use sha2::{Digest, Sha256};
+        let payload_str = payload.to_string();
+        let mut hasher = Sha256::new();
+        hasher.update(payload_str.as_bytes());
+        let payload_hash = hex::encode(hasher.finalize());
+
+        // Insert into the append-only results table (no DELETE/UPDATE permitted — SR-C4)
         sqlx::query(
-            r#"INSERT INTO results (device_id, seq, payload, received_at) VALUES ($1, $2, $3, $4)"#,
+            r#"INSERT INTO results
+               (device_id, seq, payload, payload_hash, received_at)
+               VALUES ($1, $2, $3, $4, $5)
+               ON CONFLICT (device_id, seq) DO NOTHING"#,
         )
         .bind(&device_id)
         .bind(seq)
-        .bind(serde_json::Value::Null) // payload stored as JSONB
-        .bind(chrono::Utc::now())
+        .bind(&payload)
+        .bind(&payload_hash)
+        .bind(Utc::now())
         .execute(pool)
         .await?;
 
