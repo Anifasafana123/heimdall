@@ -1,0 +1,48 @@
+{
+  "title": "SignedEnvelope",
+  "description": "Wrapper around every agent-to-server message after enrolment. The payload is signed before it touches disk (SR-C1). seq is strictly increasing per device; the server rejects any seq <= last accepted (SR-C2).",
+  "type": "object",
+  "required": ["protocol_version", "device_id", "seq", "nonce", "ts_agent", "payload_hash", "prev_hash", "payload", "signature"],
+  "additionalProperties": false,
+  "properties": {
+    "protocol_version": { "type": "integer", "const": 1 },
+    "device_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Strictly increasing counter per device. Server rejects seq <= last_accepted_seq (SR-C2, no replay)."
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$",
+      "description": "16-byte random nonce, hex-encoded. Combined with seq to prevent replay."
+    },
+    "ts_agent": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Agent wall-clock time (RFC 3339). Advisory only. Server receive time is authoritative; skew is recorded. Back-dating is impossible (SR-C2)."
+    },
+    "payload_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 hex of the JCS-canonical JSON of the payload object."
+    },
+    "prev_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 hex of the previous envelope's payload_hash for this device. Forms a hash chain; a gap or fork is detectable."
+    },
+    "payload": {
+      "type": "object",
+      "description": "One of: Heartbeat, MeasurementResult, SpeedtestLeaseRequest, FailureReport, LifecycleEvent."
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{86}==$",
+      "description": "Base64-encoded Ed25519 signature over the JCS-canonical JSON of all fields except 'signature' itself."
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "title": "FailureReport",
+  "description": "Sent when a measurement attempt fails or when the agent cannot reach the server and later reconnects. A failed measurement is still a result (FR13). Carried inside a SignedEnvelope.",
+  "type": "object",
+  "required": ["type", "failed_at", "reason"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "type": "string", "const": "failure_report" },
+    "failed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Agent wall-clock time at the moment of failure."
+    },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "transport_failure",
+        "tls_handshake_failed",
+        "probe_unreachable",
+        "lease_denied",
+        "measurement_timeout",
+        "spool_integrity_error"
+      ],
+      "description": "Machine-readable reason code."
+    },
+    "duration_ms": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "How long the failure condition lasted, if known."
+    }
+  }
+}

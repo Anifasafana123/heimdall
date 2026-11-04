@@ -1,0 +1,24 @@
+{
+  "title": "SpeedtestLeaseResponse",
+  "description": "Server response to a speedtest lease request.",
+  "type": "object",
+  "required": ["type", "decision"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "type": "string", "const": "speedtest_lease_response" },
+    "decision": {
+      "type": "string",
+      "enum": ["granted", "refused_busy", "refused_ceiling"],
+      "description": "granted: agent may start immediately. refused_busy: another device in the office holds the lease. refused_ceiling: office daily byte ceiling is exhausted (FR32)."
+    },
+    "lease_token": {
+      "type": ["string", "null"],
+      "description": "Opaque token the agent must include in the MeasurementResult that consumes this lease. Null when decision != granted."
+    },
+    "retry_after_seconds": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Suggested retry interval. Null when decision = granted."
+    }
+  }
+}

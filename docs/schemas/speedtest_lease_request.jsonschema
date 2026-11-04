@@ -1,0 +1,16 @@
+{
+  "title": "SpeedtestLeaseRequest",
+  "description": "Agent requests permission to run a full speedtest. The server grants at most one active lease per office at a time (FR30). Carried inside a SignedEnvelope.",
+  "type": "object",
+  "required": ["type"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "type": "string", "const": "speedtest_lease_request" },
+    "nic_utilisation_pct": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Current NIC utilisation sampled over 10 s before requesting. Agent self-defers if > 10% of last-known capacity (FR31)."
+    }
+  }
+}

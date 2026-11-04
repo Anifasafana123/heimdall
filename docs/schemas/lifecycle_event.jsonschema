@@ -1,0 +1,23 @@
+{
+  "title": "LifecycleEvent",
+  "description": "Boot and shutdown markers so the server can distinguish a lost connection from a switched-off computer (FR14). Carried inside a SignedEnvelope.",
+  "type": "object",
+  "required": ["type", "event", "event_at"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "type": "string", "const": "lifecycle_event" },
+    "event": {
+      "type": "string",
+      "enum": ["BOOT", "SHUTDOWN"],
+      "description": "BOOT written on startup; SHUTDOWN written by the service stop handler before the process exits. A gap between SHUTDOWN and BOOT is powered-off time, not an outage."
+    },
+    "event_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "boot_id": {
+      "type": ["string", "null"],
+      "description": "Unique identifier for this boot session. Present on BOOT events. Helps correlate spool records."
+    }
+  }
+}

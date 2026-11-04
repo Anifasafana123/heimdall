@@ -1,0 +1,17 @@
+{
+  "title": "EnrolmentRequest",
+  "description": "Sent by the agent to enrol a new device. Office code is the one-shot enrolment ticket; after enrolment the device certificate takes over (SR-A1).",
+  "type": "object",
+  "required": ["protocol_version", "office_code", "device_fingerprint", "public_key_ed25519", "timestamp"],
+  "additionalProperties": false,
+  "properties": {
+    "protocol_version": { "type": "integer", "const": 1 },
+    "office_code": {
+      "type": "string",
+      "pattern": "^HMD-[0-9A-HJ-NP-TV-Z]{4}-[0-9A-HJ-NP-TV-Z]{4}-[0-9A-HJ-NP-TV-Z]{4}$"
+    },
+    "device_fingerprint": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "public_key_ed25519":  { "type": "string", "pattern": "^[A-Za-z0-9+/]{43}=$" },
+    "timestamp":           { "type": "string", "format": "date-time" }
+  }
+}

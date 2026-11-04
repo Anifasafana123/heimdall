@@ -1,0 +1,41 @@
+{
+  "title": "ServerResponse",
+  "description": "Generic acknowledgement returned by the server after receiving a SignedEnvelope. The server may return only a lease decision, a config version number, and a revocation flag. No field may carry a command, a script, or a URL to fetch. This is a schema-level guarantee, not a policy (SR-E1).",
+  "type": "object",
+  "required": ["type", "accepted", "seq_ack"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "type": "string", "const": "server_response" },
+    "accepted": {
+      "type": "boolean",
+      "description": "True if the envelope was accepted and stored."
+    },
+    "seq_ack": {
+      "type": "integer",
+      "description": "The seq value the server accepted. Agent uses this to advance its spool pointer."
+    },
+    "error_code": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "REPLAY_DETECTED",
+        "SEQ_GAP",
+        "INVALID_SIGNATURE",
+        "REVOKED",
+        "CHAIN_BROKEN",
+        "UNSUPPORTED_VERSION",
+        "RATE_LIMITED",
+        "INTERNAL_ERROR"
+      ],
+      "description": "Null on success. Machine-readable error on rejection."
+    },
+    "config_version": {
+      "type": ["integer", "null"],
+      "description": "Current server-side config schema version. Agent re-fetches config if this differs from its cached version. This is the only 'config' signal the server sends; it carries no content."
+    },
+    "revoked": {
+      "type": "boolean",
+      "description": "True if the device certificate has been revoked. Agent must stop immediately (SR-A5)."
+    }
+  }
+}

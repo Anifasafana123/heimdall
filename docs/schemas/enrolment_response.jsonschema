@@ -1,0 +1,31 @@
+{
+  "title": "EnrolmentResponse",
+  "description": "Server response to a successful enrolment. Returns the device certificate and assigned device_id.",
+  "type": "object",
+  "required": ["protocol_version", "device_id", "certificate_pem", "ca_pin_current", "ca_pin_next", "issued_at", "expires_at"],
+  "additionalProperties": false,
+  "properties": {
+    "protocol_version": { "type": "integer", "const": 1 },
+    "device_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "UUID assigned to this device. Stable for the lifetime of the device registration."
+    },
+    "certificate_pem": {
+      "type": "string",
+      "description": "PEM-encoded device certificate signed by the HEIMDALL private CA (step-ca). Valid 90 days, auto-renewed over mTLS."
+    },
+    "ca_pin_current": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{43}=$",
+      "description": "Base64 SHA-256 of the intermediate CA public key. Agent pins this (SR-B2)."
+    },
+    "ca_pin_next": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{43}=$",
+      "description": "Upcoming pin for rotation. Two pins live at all times so rotation never breaks live agents."
+    },
+    "issued_at":  { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" }
+  }
+}

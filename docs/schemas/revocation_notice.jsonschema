@@ -1,0 +1,22 @@
+{
+  "title": "RevocationNotice",
+  "description": "Server-to-agent message. Tells the agent its certificate has been revoked (SR-A5). The agent stops sending immediately and marks itself revoked in local state. NOTE: this is the only server-to-agent message that carries a decision. No field in any message may carry a command, a script, or a URL to fetch (SR-E1).",
+  "type": "object",
+  "required": ["type", "device_id", "revoked_at", "reason"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "type": "string", "const": "revocation_notice" },
+    "device_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason": {
+      "type": "string",
+      "enum": ["maintainer_revoked", "office_revoked", "clone_detected", "enrolment_limit_exceeded"]
+    }
+  }
+}

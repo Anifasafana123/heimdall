@@ -1,0 +1,63 @@
+{
+  "title": "MeasurementResult",
+  "description": "Network measurement result. Carried inside a SignedEnvelope. A failed measurement is still a result and must be sent (FR13). Only network metrics are collected (PR1). No CPU, memory, disk or user data ever appears here.",
+  "type": "object",
+  "required": ["type", "measured_at", "measurement_kind"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "type": "string", "const": "measurement_result" },
+    "measured_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Agent wall-clock time at the moment of measurement. Advisory; server receive time is authoritative."
+    },
+    "measurement_kind": {
+      "type": "string",
+      "enum": ["latency_jitter_loss", "throughput", "link_context"],
+      "description": "Which measurement was taken."
+    },
+    "latency_ms": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Round-trip latency in milliseconds. Null on failure."
+    },
+    "jitter_ms": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Jitter (variance of latency) in milliseconds. Null on failure."
+    },
+    "packet_loss_pct": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Packet loss percentage (0–100). Null on failure."
+    },
+    "throughput_download_mbps": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Download throughput in Mbps. Present only for measurement_kind=throughput."
+    },
+    "throughput_upload_mbps": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Upload throughput in Mbps. Present only for measurement_kind=throughput."
+    },
+    "bytes_used": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Bytes consumed by HEIMDALL for this measurement (FR33)."
+    },
+    "failure_reason": {
+      "type": ["string", "null"],
+      "description": "If the measurement failed, a machine-readable reason code. The result is still stored (FR13)."
+    },
+    "link_type": {
+      "type": ["string", "null"],
+      "enum": ["ethernet", "wifi", "unknown", null]
+    },
+    "link_speed_mbps": {
+      "type": ["number", "null"],
+      "minimum": 0
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Heartbeat",
+  "description": "Sent every 60 seconds. Proves the device is online and at the office. Carried inside a SignedEnvelope. Uses negligible data (~200 B per event, FR28).",
+  "type": "object",
+  "required": ["type", "uptime_seconds"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "type": "string", "const": "heartbeat" },
+    "uptime_seconds": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Seconds since last BOOT lifecycle event."
+    },
+    "link_type": {
+      "type": "string",
+      "enum": ["ethernet", "wifi", "unknown"],
+      "description": "Current NIC type. Optional; included when known."
+    },
+    "link_speed_mbps": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Negotiated NIC speed in Mbps. Null when unavailable."
+    }
+  }
+}
